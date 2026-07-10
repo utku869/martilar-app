@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-
 import logoUrl from "./assets/logo.jpg";
 
 // ─── ENSTRÜMANLAR ────────────────────────────────────────────────────────────
@@ -39,291 +38,7 @@ const storage = {
 };
 
 // ─── VARSAYILAN ŞARKILAR ─────────────────────────────────────────────────────
-const DEFAULT_SONGS = [
-  {
-    id: "gibi-gibi", title: "Gibi Gibi", artist: "Kurtalan Ekspres",
-    key: "—", tempo: 104, time: "4/4", tags: ["repertuvar"],
-    parts: { solist: null, gitarist: null, bassist: null, baterist: null, klavye: null },
-  },
-  {
-    id: "seven-nation-army", title: "Seven Nation Army", artist: "The White Stripes",
-    key: "Mi Minör", tempo: 124, time: "4/4", tags: ["repertuvar"],
-    parts: { solist: null, gitarist: null, bassist: null, baterist: null, klavye: null },
-  },
-  {
-    id: "you-know-im-no-good", title: "You Know I'm No Good", artist: "Amy Winehouse",
-    key: "Re Minör", tempo: 102, time: "4/4", tags: ["repertuvar"],
-    parts: { solist: null, gitarist: null, bassist: null, baterist: null, klavye: null, klarnet: null },
-  },
-  {
-    id: "marti-ucusu", title: "Martı Uçuşu", artist: "Martılar",
-    key: "La Minör", tempo: 120, time: "4/4", tags: ["orijinal", "rock"],
-    parts: {
-      solist: {
-        content: `[Giriş - 8 bar sessiz]
-
-[Nakarat]
-Gökyüzünde süzülür martılar
-Rüzgarla dans eder kanatlar
-Denizin üstünde özgür
-Hiçbir şey tutamaz bizi
-
-[Verse 1]
-Sabahın ilk ışığında
-Kıyıya vurur dalgalar
-Gözlerim ufukta kalır
-Hep uzaklara bakar
-
-[Nakarat]
-
-[Bridge]
-Aaah... aaah...
-Uçmak istiyorum seninle
-Sonsuza kadar...
-
-[Son Nakarat - 2x]`,
-        notes: "Verse yumuşak, nakarat güçlü. Bridge'de falsetto.",
-      },
-      gitarist: {
-        content: `[Giriş - Am - G - F - E | 8 bar]
-e|--0--0--3--3--1--1--0--0--|
-B|--1--1--3--3--1--1--0--0--|
-G|--2--2--0--0--2--2--1--1--|
-D|--2--2--0--0--3--3--2--2--|
-A|--0--0--2--2--3--3--2--2--|
-E|-----0--------1--------0--|
-
-[Verse - Fingerpicking]
-Am - G - F - E (2'şer bar)
-Sağ el: P - i - m - a - m - i
-
-[Nakarat - Power chords]
-Am5 - G5 - F5 - E5, distortion
-
-[Bridge - Temiz arpej]
-Am/C - G/B - Fmaj7 - Esus4 - E
-
-[Solo - 16 bar - Am pentatonik]`,
-        notes: "Verse clean, nakarat distortion, solo wah.",
-      },
-      bassist: {
-        content: `[Verse]
-G|-----------------|
-D|-----------------|
-A|--0--0--3--3-----|
-E|--------1--1--3--|
-Am - G - F - E
-
-[Nakarat]
-Sekizlikler, geçişlerde slide
-
-[Bridge]
-Root, uzun tutalar, 4. vuruşta ghost
-
-[Fill → Son Nakarat]
-La - Si - Do - Re - Mi`,
-        notes: "DI + amp. Orta-alt frekanslar önde.",
-      },
-      baterist: {
-        content: `[Giriş]
-HH 8'lik + kick 1-3, snare 2-4
-
-[Verse]
-BD: 1 . . 3 . . . .
-SN: . . 2 . . . 4 .
-HH: x x x x x x x x
-
-[Nakarat]
-HH açık çeyreklik, 2. tekrarda ride
-
-[Bridge]
-Ride + snare, BD minimum
-
-[Fill]
-16'lık tom, crash ile gir`,
-        notes: "Nakaratlarda ride bell.",
-      },
-      klavye: {
-        content: `[Giriş - Pad arpej]
-Am: La-Do-Mi / G: Sol-Si-Re
-F: Fa-La-Do / E: Mi-Sol#-Si
-
-[Verse]
-String pad + piyano, 2'şer bar
-
-[Nakarat]
-Sağ el counterpoint, sol el root+5
-
-[Bridge]
-Fmaj7 arpej → Esus4 → E
-
-[Outro]
-Am9 - Gmaj7 - Fmaj7 - E (pp→ppp)`,
-        notes: "Rhodes. Sustain hafif.",
-      },
-    },
-  },
-  {
-    id: "kiyi-turkusu", title: "Kıyı Türküsü", artist: "Martılar",
-    key: "Re Majör", tempo: 96, time: "3/4", tags: ["orijinal", "folk", "klarnet"],
-    parts: {
-      solist: {
-        content: `[Verse 1]
-Bir yanda deniz, bir yanda dağ
-Ortasında küçük köyüm kalmış yalnız
-Sabah ezanı yükselir havaya
-Annem penceresinden bakar uzak
-
-[Nakarat]
-Ooooh... kıyılar boyunca
-Türkülerim uçar gider
-Ooooh... rüzgar taşır sesimi
-Senden sana geri döner
-
-[Klarnet Solosu - 16 bar]
-
-[Son Nakarat + Fade]`,
-        notes: "Türkü ağzı, vibrato.",
-      },
-      gitarist: {
-        content: `[3/4 Vals - Fingerpicking]
-Pattern: P - i - m
-D - A - Bm - G (2'şer bar)
-D: xx0232 / A: x02220
-Bm: x24432 / G: 320003
-
-[Klarnet Solosu Eşliği]
-D - A - G - A döngü, çok yumuşak
-
-[Outro - Ritardando]`,
-        notes: "Akustik. Kapo 2.",
-      },
-      bassist: {
-        content: `[3/4 Vals]
-1. vuruş root, 2-3 hafif
-D: Re-Fa#-La / A: La-Mi-La
-Bm: Si-Re-Fa# / G: Sol-Si-Re
-
-[Solo altı]
-Sadece 1. vuruşlar`,
-        notes: "Upright ideal. Sade.",
-      },
-      baterist: {
-        content: `[Vals]
-1: BD + ride bell
-2-3: HH kapalı
-SN: 3. vuruşta hafif
-
-[Solo altı]
-Brush, jazz hissi`,
-        notes: "Tüm şarkıda brush.",
-      },
-      klavye: {
-        content: `[Vals Eşliği]
-Sol el: bas (1)
-Sağ el: akor (2-3)
-D: Re3 | Fa#4-La4 | Fa#4-La4
-
-[Solo altı]
-Sadece sol el`,
-        notes: "Akustik piyano, sustain aktif.",
-      },
-      klarnet: {
-        content: `[Solo - 16 bar, Re Majör]
-1-4: Re4-Mi4-Fa#4-Sol4-La4 legato
-5-8: Si4 accent → iniş → Re4
-9-12: Re5 sıçra, vibrato
-13-16: Re majör improv, Re4 (pp)
-
-[Intro - 4 bar]
-Yüksek ince notalar`,
-        notes: "Sib klarnet, folk tınısı.",
-      },
-    },
-  },
-  {
-    id: "firtina-oncesi", title: "Fırtına Öncesi", artist: "Martılar",
-    key: "Mi Minör", tempo: 145, time: "4/4", tags: ["orijinal", "rock"],
-    parts: {
-      solist: {
-        content: `[Verse 1]
-Bulutlar karardı ovada
-Şimşekler çaktı ardı ardına
-Fırtına geliyor uzaklardan
-Kimse tutamaz onu
-
-[Nakarat]
-Fırtına! Fırtına!
-Her şeyi yıkıyor geçince
-Ama sonra güneş doğuyor yeniden
-
-[Köprü]
-Ve fırtına geçer... her zaman geçer...
-
-[Final Nakarat - 2x]`,
-        notes: "Pre-chorus kırılgan, nakarat tam gaz.",
-      },
-      gitarist: {
-        content: `[Intro Riff - Em]
-e|--12-12-12-10-12-10-9-10--|
-(distortion, hafif palm mute)
-
-[Verse]
-Em - D - C - B7 (1'er bar)
-
-[Nakarat - Full gain]
-Em5 - D5 - C5 - B5
-
-[Solo - 24 bar]
-Em pentatonik, hız artışı`,
-        notes: "Yüksek gain. Wah + delay.",
-      },
-      bassist: {
-        content: `[Intro]
-Mi - Re - Do - Si (oktav aşağı)
-
-[Verse]
-E: Mi-Mi-Mi-Sol-Mi-Sol-La-Sol
-
-[Nakarat]
-Muted 16'lıklar, kick ile kilitlen
-
-[Final]
-Slap fill, bend bitiş`,
-        notes: "Aktif bass, hafif overdrive.",
-      },
-      baterist: {
-        content: `[Intro build]
-Kick+snare → HH → tom fill
-
-[Verse]
-BD: 1 . e . 3 . e .
-SN: . . 2 . . . 4 .
-
-[Nakarat]
-Doubletime, crash her 2 barda
-
-[Final]
-Crescendo bitiş`,
-        notes: "Double pedal. En hızlı şarkı.",
-      },
-      klavye: {
-        content: `[Intro]
-Em9 pad, tremolo
-
-[Verse]
-Sol el root 8'lik
-
-[Nakarat]
-Geniş voicing, ff
-
-[Köprü - Solo piyano]
-Cmaj7 - Bsus2 - Em`,
-        notes: "Stage piano + strings.",
-      },
-    },
-  },
-];
+const DEFAULT_SONGS = [];
 
 // Metronom ses tipleri
 const CLICK_TYPES = [
@@ -578,7 +293,7 @@ export default function MartilarApp() {
   const [fontSize, setFontSize] = useState(14);
   const [query, setQuery] = useState("");
   const [metroOpen, setMetroOpen] = useState(false);
-  const [practiceOpen, setPracticeOpen] = useState(false);
+
   const [addOpen, setAddOpen] = useState(false);
   const [midiOpen, setMidiOpen] = useState(false);
   const [roomJoinOpen, setRoomJoinOpen] = useState(false);
@@ -843,7 +558,7 @@ export default function MartilarApp() {
             <PartView song={song} part={part} allParts={availableParts}
               fontSize={fontSize} setFontSize={setFontSize}
               onChangePart={setPart} onBack={() => setScreen("song")}
-              onMetro={() => setMetroOpen(true)} onPractice={() => setPracticeOpen(true)}
+              onMetro={() => setMetroOpen(true)}
               onSave={savePart}
               roomRole={room ? (room.role === "member" && songId === "room" ? "member" : room.role === "host" && songId === room.songId ? "host" : null) : null}
               roomCode={room?.code}
@@ -852,11 +567,6 @@ export default function MartilarApp() {
           )}
 
           {metroOpen && song && <Metronome song={song} onClose={() => setMetroOpen(false)} />}
-          {practiceOpen && song && (
-            <Practice song={song}
-              targetNotes={part ? parseNoteSeq(song.parts[part]?.practiceNotes || "") : []}
-              onClose={() => setPracticeOpen(false)} />
-          )}
           {addOpen && <AddSong onAdd={addSong} onClose={() => setAddOpen(false)} />}
           {midiOpen && <MidiImport onCreate={addMidiSong} onClose={() => setMidiOpen(false)} />}
           {roomJoinOpen && <RoomJoin onJoin={joinRoom} onClose={() => setRoomJoinOpen(false)} />}
@@ -875,15 +585,8 @@ function Home({ onEnter }) {
       <div className="gull-ring" style={st.ring} />
       <div className="gull-ring" style={{ ...st.ring, animationDelay: "1.3s" }} />
       <div style={{ textAlign: "center", zIndex: 1, width: "100%" }}>
-        {logoUrl ? (
-          <img src={logoUrl} alt="Martılar Fusion"
-            style={{ width: "82%", maxWidth: 330, borderRadius: 18, boxShadow: "0 12px 40px rgba(0,0,0,.55), 0 0 0 1px #ffffff0c", display: "block", margin: "0 auto" }} />
-        ) : (
-          <>
-            <div style={{ fontSize: 44, filter: "drop-shadow(0 0 18px rgba(232,201,126,.5))" }}>🐦</div>
-            <h1 style={st.brand}>MARTILAR</h1>
-          </>
-        )}
+        <img src={logoUrl} alt="Martılar Fusion"
+          style={{ width: "62%", maxWidth: 240, borderRadius: 16, boxShadow: "0 10px 30px rgba(0,0,0,.5), 0 0 0 1px #ffffff0c", display: "block", margin: "0 auto" }} />
         <p style={st.tagline}>Sahne Defteri</p>
         <div style={st.divider} />
         <p style={st.desc}>Tablar · Akış · Metronom · Pratik Puanı</p>
@@ -1234,12 +937,180 @@ function PartView({ song, part, allParts, fontSize, setFontSize, onChangePart, o
   const lastCurUpd = useRef(0);
   const hasAudioSong = Object.values(song.parts).some((p) => p?.events?.length);
   const isStaffPart = data?.events && (part === "bassist" || part === "gitarist" || part === "baterist");
+
+  // ─── PRATİK MODU (Guitar Hero tarzı) ───
+  const [practiceOn, setPracticeOn] = useState(false);
+  const [countIn, setCountIn] = useState(0);          // 4,3,2,1,0 (0 = akış başladı)
+  const [liveNote, setLiveNote] = useState("—");
+  const [pScore, setPScore] = useState({ hit: 0, miss: 0, combo: 0, maxCombo: 0, total: 0 });
+  const [pFlash, setPFlash] = useState(null);         // "hit" | "miss" son geri bildirim
+  const [pResult, setPResult] = useState(null);
+  const practiceRef = useRef(false);
+  const micStreamRef = useRef(null);
+  const micRafRef = useRef(null);
+  const analyserRef = useRef(null);
+  const targetsRef = useRef([]);      // {s, m, pc, hit, judged}
+  const scoreRef = useRef({ hit: 0, miss: 0, combo: 0, maxCombo: 0, total: 0 });
+  const lastPlayedPcRef = useRef(-1);
+  const lastPlayedAtRef = useRef(0);
+  useEffect(() => { practiceRef.current = practiceOn; }, [practiceOn]);
   // Solist için de tick tabanlı sync mümkün: şarkı MIDI'den geldiyse ticksPerBar'ı biliriz
   const anyMidiPart = Object.values(song.parts).find((p) => p?.ticksPerBar);
   const beatsPerBarSong = parseInt(song.time.split("/")[0], 10) || 4;
   const songTicksPerBar = anyMidiPart?.ticksPerBar || 480 * beatsPerBarSong;
   const canSeekLoop = isStaffPart || (part === "solist" && hasAudioSong);
   const solistSync = part === "solist" && hasAudioSong;
+
+  // ─── Pratik: mikrofon + isabet tespiti ───
+  const stopPractice = useCallback((showResult = false) => {
+    practiceRef.current = false;
+    setPracticeOn(false);
+    setCountIn(0);
+    cancelAnimationFrame(micRafRef.current);
+    if (micStreamRef.current) { micStreamRef.current.getTracks().forEach((t) => t.stop()); micStreamRef.current = null; }
+    if (showResult) {
+      const s = scoreRef.current;
+      const acc = s.total > 0 ? Math.round((s.hit / s.total) * 100) : 0;
+      const stars = Math.max(0, Math.min(5, Math.round(acc / 20)));
+      setPResult({ ...s, acc, stars });
+    }
+    setPlaying(false);
+  }, []);
+
+  const startPractice = useCallback(async () => {
+    if (!isStaffPart) return; // nota verisi gerektirir
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!audioCtxRef.current) audioCtxRef.current = new AC();
+      await audioCtxRef.current.resume();
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+      });
+      micStreamRef.current = stream;
+      const srcNode = audioCtxRef.current.createMediaStreamSource(stream);
+      const analyser = audioCtxRef.current.createAnalyser();
+      analyser.fftSize = 2048;
+      srcNode.connect(analyser);
+      analyserRef.current = analyser;
+
+      // Hedef notaları hazırla (bu partisyonun tüm event'leri)
+      targetsRef.current = (data.events || []).map((e) => ({
+        s: e.s, m: e.m, pc: ((e.m % 12) + 12) % 12, judged: false, hit: false,
+      }));
+      scoreRef.current = { hit: 0, miss: 0, combo: 0, maxCombo: 0, total: targetsRef.current.length };
+      setPScore({ ...scoreRef.current });
+      setPResult(null);
+      setPFlash(null);
+      lastPlayedPcRef.current = -1;
+
+      // Baştan başlat
+      tickRef.current = 0;
+      setCursorTick(0);
+      if (ref.current) ref.current.scrollTop = 0;
+
+      setPracticeOn(true);
+      practiceRef.current = true;
+
+      // 4→1 geri sayım (şarkı temposunda), sonra akış
+      const interval = 60000 / song.tempo;
+      let c = beatsPerBarSong;
+      setCountIn(c);
+      // sayım tık sesi
+      const tick = () => {
+        playClick(audioCtxRef.current, c === beatsPerBarSong, "bip", 0.4);
+        c--;
+        setCountIn(c);
+        if (c <= 0) {
+          clearInterval(ci);
+          setCountIn(0);
+          setPlaying(true);       // ana akış motoru başlar (aşağıdaki useEffect)
+          startMicLoop();
+        }
+      };
+      const ci = setInterval(tick, interval);
+      tick();
+    } catch {
+      setPracticeOn(false);
+      setPResult({ error: true });
+    }
+  }, [isStaffPart, data, song.tempo, beatsPerBarSong]);
+
+  const startMicLoop = useCallback(() => {
+    const analyser = analyserRef.current;
+    if (!analyser) return;
+    const buf = new Float32Array(analyser.fftSize);
+    const sr = audioCtxRef.current.sampleRate;
+    const loop = () => {
+      if (!practiceRef.current) return;
+      analyser.getFloatTimeDomainData(buf);
+      const { freq } = autoCorrelate(buf, sr);
+      if (freq > 0) {
+        const pc = ((freqToMidi(freq) % 12) + 12) % 12;
+        setLiveNote(freqToNote(freq));
+        const now = performance.now();
+        // Aynı notayı tekrar tekrar saymamak için: farklı pc ya da 120ms boşluk
+        if (pc !== lastPlayedPcRef.current || now - lastPlayedAtRef.current > 140) {
+          lastPlayedPcRef.current = pc;
+          lastPlayedAtRef.current = now;
+          judgePlay(pc);
+        }
+      } else {
+        setLiveNote("—");
+      }
+      micRafRef.current = requestAnimationFrame(loop);
+    };
+    micRafRef.current = requestAnimationFrame(loop);
+  }, []);
+
+  // Çalınan pc'yi cursor civarındaki hedefle karşılaştır
+  const judgePlay = useCallback((pc) => {
+    const division = data.division || 480;
+    const nowTick = tickRef.current;
+    const windowTicks = division * 0.6; // ±yarım vuruşa yakın tolerans
+    const targets = targetsRef.current;
+    // Cursor'a en yakın, henüz yargılanmamış, pc eşleşen hedef
+    let bestIdx = -1, bestDist = Infinity;
+    for (let i = 0; i < targets.length; i++) {
+      const t = targets[i];
+      if (t.judged) continue;
+      const dist = Math.abs(t.s - nowTick);
+      if (dist > windowTicks) continue;
+      if (t.pc === pc && dist < bestDist) { bestDist = dist; bestIdx = i; }
+    }
+    const s = scoreRef.current;
+    if (bestIdx >= 0) {
+      targets[bestIdx].judged = true;
+      targets[bestIdx].hit = true;
+      s.hit++; s.combo++; s.maxCombo = Math.max(s.maxCombo, s.combo);
+      setPFlash("hit");
+      setPScore({ ...s });
+    } else {
+      // Yanlış nota → combo sıfırla (miss say ama total'ı şişirme)
+      s.combo = 0;
+      setPFlash("miss");
+      setPScore({ ...s });
+    }
+    setTimeout(() => setPFlash(null), 150);
+  }, [data]);
+
+  // Cursor bir hedefi tolerans penceresinin ötesine geçtiyse ve çalınmadıysa → kaçırıldı
+  useEffect(() => {
+    if (!practiceOn || countIn > 0) return;
+    const division = data?.division || 480;
+    const past = tickRef.current - division * 0.6;
+    let changed = false;
+    const s = scoreRef.current;
+    for (const t of targetsRef.current) {
+      if (!t.judged && t.s < past) {
+        t.judged = true; t.hit = false;
+        s.miss++; s.combo = 0; changed = true;
+      }
+    }
+    if (changed) setPScore({ ...s });
+    // Şarkı bitti mi?
+    const allJudged = targetsRef.current.length > 0 && targetsRef.current.every((t) => t.judged);
+    if (allJudged) stopPractice(true);
+  }, [cursorTick, practiceOn, countIn, data, stopPractice]);
 
   const seekTo = useCallback((tick) => {
     const clamped = Math.max(0, tick);
@@ -1406,7 +1277,10 @@ function PartView({ song, part, allParts, fontSize, setFontSize, onChangePart, o
           const isCur = e.k === part;
           const mode = audioModeRef.current;
           let vol;
-          if (mode === 2) vol = 0;
+          if (practiceRef.current) {
+            // Pratik modu: çalınan enstrümanın sesi verilmez (kullanıcı çalar), diğerleri eşlik eder
+            vol = isCur ? 0 : 0.32;
+          } else if (mode === 2) vol = 0;
           else if (isCur) vol = mode === 1 ? 0 : 1;
           else vol = 0.3;
           if (vol > 0) synthNote(ctx, e.k, e.m, when, e.d / ticksPerSec, vol);
@@ -1477,7 +1351,12 @@ function PartView({ song, part, allParts, fontSize, setFontSize, onChangePart, o
           </button>
         ))}
         <div style={{ flex: 1 }} />
-        <button style={{ ...st.tab, opacity: 1 }} onClick={onPractice}>🎙</button>
+        <button
+          title={isStaffPart ? "Pratik modu (Guitar Hero)" : "Pratik modu MIDI nota verisi gerektirir"}
+          style={{ ...st.tab, opacity: isStaffPart ? 1 : 0.35, color: practiceOn ? "#7EC97E" : "inherit" }}
+          onClick={() => { if (!isStaffPart) return; practiceOn ? stopPractice(false) : startPractice(); }}>
+          🎮
+        </button>
         <button style={{ ...st.tab, color: "#E8C97E", opacity: 1 }} onClick={onMetro}>◉</button>
       </div>
 
@@ -1560,8 +1439,53 @@ function PartView({ song, part, allParts, fontSize, setFontSize, onChangePart, o
               )}
               <div style={{ height: 80 }} />
             </div>
+            {/* Pratik: geri sayım örtüsü */}
+            {practiceOn && countIn > 0 && (
+              <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(7,7,12,.75)", zIndex: 10 }}>
+                <div className="count-pop" key={countIn} style={{ fontSize: 110, fontFamily: "Georgia, serif", color: "#7EC97E", lineHeight: 1, textShadow: "0 0 40px rgba(126,201,126,.6)" }}>{countIn}</div>
+                <div style={{ fontSize: 12, color: "#888", letterSpacing: 4, textTransform: "uppercase", marginTop: 8 }}>Hazır ol — çalmaya başla</div>
+              </div>
+            )}
+            {/* Pratik: isabet flaşı (kenar parıltısı) */}
+            {practiceOn && pFlash && (
+              <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 9,
+                boxShadow: `inset 0 0 60px ${pFlash === "hit" ? "rgba(126,201,126,.45)" : "rgba(201,126,126,.4)"}`,
+                transition: "opacity .1s" }} />
+            )}
           </div>
-          {/* Oynatma çubuğu */}
+
+          {/* Pratik skor paneli */}
+          {practiceOn && (
+            <div style={st.practicePanel}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ textAlign: "center", minWidth: 54 }}>
+                  <div style={{ fontSize: 22, fontFamily: "Georgia, serif", color: pFlash === "hit" ? "#7EC97E" : pFlash === "miss" ? "#C97E7E" : "#EEE8D5", transition: "color .1s" }}>{liveNote}</div>
+                  <div style={{ fontSize: 8, color: "#666", letterSpacing: 1, textTransform: "uppercase" }}>çaldığın</div>
+                </div>
+                <div style={{ flex: 1, display: "flex", gap: 14, justifyContent: "center" }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 18, color: "#7EC97E", fontFamily: "monospace" }}>{pScore.hit}</div>
+                    <div style={{ fontSize: 8, color: "#666", textTransform: "uppercase" }}>isabet</div>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 18, color: "#C97E7E", fontFamily: "monospace" }}>{pScore.miss}</div>
+                    <div style={{ fontSize: 8, color: "#666", textTransform: "uppercase" }}>kaçan</div>
+                  </div>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 18, color: "#E8C97E", fontFamily: "monospace" }}>{pScore.combo}<span style={{ fontSize: 11 }}>×</span></div>
+                    <div style={{ fontSize: 8, color: "#666", textTransform: "uppercase" }}>kombo</div>
+                  </div>
+                </div>
+                <button style={{ ...st.playCtl, width: 40, height: 40, fontSize: 12, borderColor: "#C97E7E66", color: "#C97E7E", background: "#2a1515" }}
+                  onClick={() => stopPractice(true)}>■</button>
+              </div>
+              <div style={{ height: 4, background: "#1a1a24", borderRadius: 2, marginTop: 8, overflow: "hidden" }}>
+                <div style={{ height: "100%", width: `${pScore.total ? (pScore.hit + pScore.miss) / pScore.total * 100 : 0}%`, background: "linear-gradient(90deg,#7EC97E,#E8C97E)", transition: "width .2s" }} />
+              </div>
+            </div>
+          )}
+          {/* Oynatma çubuğu (pratik modunda gizli — kendi kontrolü var) */}
+          {!practiceOn && (
           <div style={{ ...st.playBar, borderTopColor: inst.color + "22" }}>
             {roomRole === "member" ? (
               <span title="Kontrol host'ta" style={{ ...st.playCtl, borderColor: "#ffffff18", color: "#555", display: "flex", alignItems: "center", justifyContent: "center", cursor: "default" }}>
@@ -1621,6 +1545,37 @@ function PartView({ song, part, allParts, fontSize, setFontSize, onChangePart, o
             </div>
             <span style={{ fontSize: 10, color: "#666", fontFamily: "monospace" }}>{song.tempo * speed | 0} BPM</span>
           </div>
+          )}
+
+          {/* Pratik sonuç ekranı */}
+          {pResult && (
+            <div style={{ position: "absolute", inset: 0, background: "rgba(7,7,12,.92)", zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
+              {pResult.error ? (
+                <div style={{ color: "#C97E7E", textAlign: "center", fontSize: 13, lineHeight: 1.7 }}>
+                  Mikrofona erişilemedi.<br />Tarayıcı izinlerini kontrol edin.
+                </div>
+              ) : (
+                <>
+                  <div style={{ fontSize: 34, letterSpacing: 4 }}>
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <span key={i} style={{ color: i < pResult.stars ? "#E8C97E" : "#2a2a35", textShadow: i < pResult.stars ? "0 0 14px rgba(232,201,126,.6)" : "none" }}>★</span>
+                    ))}
+                  </div>
+                  <div style={{ fontSize: 46, fontFamily: "Georgia, serif", color: "#EEE8D5", marginTop: 10 }}>%{pResult.acc}</div>
+                  <div style={{ fontSize: 10, color: "#666", letterSpacing: 2, textTransform: "uppercase" }}>İsabet Oranı</div>
+                  <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+                    <div style={st.resultCell}><b style={{ color: "#7EC97E" }}>{pResult.hit}</b><span>isabet</span></div>
+                    <div style={st.resultCell}><b style={{ color: "#C97E7E" }}>{pResult.miss}</b><span>kaçan</span></div>
+                    <div style={st.resultCell}><b style={{ color: "#E8C97E" }}>{pResult.maxCombo}×</b><span>en yüksek kombo</span></div>
+                  </div>
+                  <div style={{ display: "flex", gap: 8, marginTop: 22, width: "100%", maxWidth: 300 }}>
+                    <button style={{ ...st.saveBtn, background: "#152a15", borderColor: "#7EC97E55", color: "#7EC97E" }} onClick={() => { setPResult(null); startPractice(); }}>↻ Tekrar</button>
+                    <button style={st.cancelBtn} onClick={() => setPResult(null)}>Kapat</button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </>
       ) : (
         <div style={st.emptyPart}>
@@ -1992,366 +1947,6 @@ function Metronome({ song, onClose }) {
   );
 }
 
-// ─── PRATİK MODU: mikrofon + puanlama ────────────────────────────────────────
-// Pratik modunda akan cursor'lu tek satır tab şeridi
-function PracticeStrip({ data, part, cursorTick }) {
-  const isDrum = part === "baterist";
-  const labels = isDrum ? DRUM_LINES.map((d) => d.label) : TUNINGS[part].labels;
-  const place = isDrum ? drumPlacer : stringPlacer(TUNINGS[part].open);
-  const n = labels.length;
-  const gap = 20, top = 16, H = top + (n - 1) * gap + 16;
-  const PPQ = 0.14; // tik başına piksel (yatay yoğunluk)
-  const VIEW_W = 360, CURSOR_X = VIEW_W * 0.35;
-  const events = data.events || [];
-  const division = data.division || 480;
-  // cursor'ı sabit tutmak için içeriği sola kaydır
-  const shift = CURSOR_X - cursorTick * PPQ;
-  const visible = events.filter((e) => {
-    const x = e.s * PPQ + shift;
-    return x > -30 && x < VIEW_W + 30;
-  });
-  return (
-    <svg width="100%" height={H} viewBox={`0 0 ${VIEW_W} ${H}`} preserveAspectRatio="xMidYMid meet" style={{ display: "block" }}>
-      {labels.map((lb, i) => {
-        const y = top + i * gap;
-        return <line key={i} x1={0} y1={y} x2={VIEW_W} y2={y} stroke="#2a2a35" strokeWidth="1" />;
-      })}
-      {visible.map((e, k) => {
-        const p = place(e.m);
-        if (!p) return null;
-        const x = e.s * PPQ + shift;
-        const y = top + p.idx * gap;
-        const txt = String(p.text);
-        const w = txt.length * 9 + 5;
-        return (
-          <g key={k}>
-            <rect x={x - w / 2} y={y - 9} width={w} height={18} fill="#0d0d14" />
-            <text x={x} y={y + 5} fontSize="15" fontWeight="700" fill="#EEE8D5" textAnchor="middle" fontFamily="'Courier New', monospace">{txt}</text>
-          </g>
-        );
-      })}
-      {/* Sabit cursor */}
-      <line x1={CURSOR_X} y1={top - 10} x2={CURSOR_X} y2={top + (n - 1) * gap + 10} stroke="#E8C97E" strokeWidth="2.5" opacity="0.95" />
-      <circle cx={CURSOR_X} cy={top - 10} r="3" fill="#E8C97E" />
-    </svg>
-  );
-}
-
-function Practice({ song, targetNotes = [], onClose }) {
-  const beatsPerBar = parseInt(song.time.split("/")[0], 10) || 4;
-  const [phase, setPhase] = useState("ready"); // ready | countin | live | result | error
-  const [errMsg, setErrMsg] = useState("");
-  const [liveNote, setLiveNote] = useState("—");
-  const [beat, setBeat] = useState(-1);
-  const [bars, setBars] = useState(0);
-  const [clickOn, setClickOn] = useState(true);
-  const [result, setResult] = useState(null);
-  const [hit, setHit] = useState({ c: 0, a: 0 });
-  const [tIdx, setTIdx] = useState(0);
-  const [countNum, setCountNum] = useState(beatsPerBar);
-  const [liveCursor, setLiveCursor] = useState(0);
-  const idxRef = useRef(0);
-  const hitRef = useRef({ c: 0, a: 0 });
-  const liveRafRef = useRef(null);
-
-  // Pratik için staff verisi (varsa) — bass/gitar/bateri
-  const staffPart = ["bassist", "gitarist", "baterist"].find((p) => song.parts[p]?.events?.length);
-  const staffData = staffPart ? song.parts[staffPart] : null;
-
-  const ctxRef = useRef(null);
-  const streamRef = useRef(null);
-  const analyserRef = useRef(null);
-  const rafRef = useRef(null);
-  const timerRef = useRef(null);
-  const beatRef = useRef(-1);
-  const startTimeRef = useRef(0);
-  const onsetsRef = useRef([]);
-  const lastNoteRef = useRef(null);
-  const silenceRef = useRef(true);
-  const clickOnRef = useRef(true);
-  const soundPrefRef = useRef("bip");
-  useEffect(() => { clickOnRef.current = clickOn; }, [clickOn]);
-  useEffect(() => {
-    storage.get("martilar-metro-sound")
-      .then((r) => { if (r?.value) soundPrefRef.current = r.value; })
-      .catch(() => {});
-  }, []);
-
-  const click = useCallback((accent) => {
-    const ctx = ctxRef.current;
-    if (!ctx || !clickOnRef.current) return;
-    playClick(ctx, accent, soundPrefRef.current, 0.35);
-  }, []);
-
-  const startLiveCursor = useCallback(() => {
-    if (!staffData) return;
-    const tps = ((staffData.division || 480) * song.tempo) / 60; // pratik hızı 1×
-    const t0 = performance.now();
-    const anim = (now) => {
-      setLiveCursor(((now - t0) / 1000) * tps);
-      liveRafRef.current = requestAnimationFrame(anim);
-    };
-    liveRafRef.current = requestAnimationFrame(anim);
-  }, [staffData, song.tempo]);
-
-  const cleanup = useCallback(() => {
-    cancelAnimationFrame(rafRef.current);
-    cancelAnimationFrame(liveRafRef.current);
-    clearInterval(timerRef.current);
-    if (streamRef.current) streamRef.current.getTracks().forEach((t) => t.stop());
-    streamRef.current = null;
-  }, []);
-
-  useEffect(() => cleanup, [cleanup]);
-
-  const start = async () => {
-    try {
-      const AC = window.AudioContext || window.webkitAudioContext;
-      if (!ctxRef.current) ctxRef.current = new AC();
-      await ctxRef.current.resume();
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
-      });
-      streamRef.current = stream;
-      const src = ctxRef.current.createMediaStreamSource(stream);
-      const analyser = ctxRef.current.createAnalyser();
-      analyser.fftSize = 2048;
-      src.connect(analyser);
-      analyserRef.current = analyser;
-
-      onsetsRef.current = [];
-      lastNoteRef.current = null;
-      silenceRef.current = true;
-      idxRef.current = 0;
-      hitRef.current = { c: 0, a: 0 };
-      setHit({ c: 0, a: 0 });
-      setTIdx(0);
-      setBars(0);
-      setPhase("countin");
-
-      // 1 bar count-in (4→3→2→1), sonra canlı
-      const interval = 60000 / song.tempo;
-      beatRef.current = -1;
-      setCountNum(beatsPerBar);
-      setLiveCursor(0);
-      let count = 0;
-      const tick = () => {
-        beatRef.current = (beatRef.current + 1) % beatsPerBar;
-        setBeat(beatRef.current);
-        click(beatRef.current === 0);
-        count++;
-        if (count <= beatsPerBar) setCountNum(beatsPerBar - count + 1); // 4,3,2,1
-        if (count === beatsPerBar) {
-          startTimeRef.current = performance.now() + interval;
-          setTimeout(() => { setPhase("live"); startLiveCursor(); }, interval);
-        }
-        if (count > beatsPerBar && beatRef.current === 0) setBars((b) => b + 1);
-      };
-      tick();
-      timerRef.current = setInterval(tick, interval);
-
-      // Pitch döngüsü
-      const buf = new Float32Array(analyser.fftSize);
-      const loop = () => {
-        analyser.getFloatTimeDomainData(buf);
-        const { freq, rms } = autoCorrelate(buf, ctxRef.current.sampleRate);
-        if (freq > 0) {
-          const note = freqToNote(freq);
-          setLiveNote(note);
-          const now = performance.now();
-          const isOnset = silenceRef.current || note !== lastNoteRef.current;
-          if (isOnset && now > startTimeRef.current) {
-            onsetsRef.current.push(now - startTimeRef.current);
-            if (targetNotes.length) {
-              const pc = ((freqToMidi(freq) % 12) + 12) % 12;
-              const expected = targetNotes[idxRef.current % targetNotes.length];
-              hitRef.current.a++;
-              if (pc === expected.pc) hitRef.current.c++;
-              idxRef.current++;
-              setTIdx(idxRef.current);
-              setHit({ ...hitRef.current });
-            }
-          }
-          lastNoteRef.current = note;
-          silenceRef.current = false;
-        } else {
-          if (rms < 0.008) { silenceRef.current = true; setLiveNote("—"); }
-        }
-        rafRef.current = requestAnimationFrame(loop);
-      };
-      loop();
-    } catch (e) {
-      setErrMsg("Mikrofona erişilemedi. Tarayıcı izinlerini kontrol edin.");
-      setPhase("error");
-    }
-  };
-
-  const finish = () => {
-    cleanup();
-    const interval = 60000 / song.tempo;
-    const onsets = onsetsRef.current;
-    const elapsed = performance.now() - startTimeRef.current;
-    const beatsElapsed = Math.max(1, Math.floor(elapsed / interval));
-
-    if (onsets.length < 2) {
-      setResult({ stars: 0, accuracy: 0, onsets: onsets.length, timing: null, beats: beatsElapsed });
-      setPhase("result");
-      return;
-    }
-    // Ritim doğruluğu: her vuruşun en yakın metronom vuruşuna uzaklığı
-    let errSum = 0;
-    for (const t of onsets) {
-      const mod = t % interval;
-      const dist = Math.min(mod, interval - mod);
-      errSum += dist / (interval / 2); // 0 = tam vuruşta, 1 = tam arada
-    }
-    const timingScore = Math.max(0, 1 - errSum / onsets.length);
-    // Aktivite: vuruş yoğunluğu (en az vuruş başına ~yarım onset bekle)
-    const activity = Math.min(1, onsets.length / (beatsElapsed * 0.5));
-    let total, notePct = null;
-    if (targetNotes.length && hitRef.current.a > 0) {
-      const noteScore = hitRef.current.c / hitRef.current.a;
-      notePct = Math.round(noteScore * 100);
-      total = noteScore * 0.5 + timingScore * 0.35 + activity * 0.15;
-    } else {
-      total = timingScore * 0.65 + activity * 0.35;
-    }
-    const stars = Math.max(1, Math.round(total * 5));
-    setResult({
-      stars,
-      accuracy: Math.round(total * 100),
-      timingPct: Math.round(timingScore * 100),
-      notePct,
-      correct: hitRef.current.c,
-      attempts: hitRef.current.a,
-      onsets: onsets.length,
-      beats: beatsElapsed,
-    });
-    setPhase("result");
-  };
-
-  return (
-    <div style={st.overlay} onClick={(e) => e.target === e.currentTarget && phase !== "live" && phase !== "countin" && (cleanup(), onClose())}>
-      <div style={st.sheet}>
-        <div style={st.sheetHandle} />
-        <div style={st.sheetTitle}>🎙 Pratik Modu</div>
-        <div style={{ textAlign: "center", fontSize: 11, color: "#666", fontFamily: "monospace" }}>
-          {song.title} · {song.tempo} BPM · {song.time}
-        </div>
-
-        {phase === "ready" && (
-          <>
-            <p style={{ color: "#999", fontSize: 12, lineHeight: 1.7, textAlign: "center", margin: "18px 6px" }}>
-              1 bar sayım sonrası çalmaya başlayın. Uygulama çaldığınız notayı dinler,
-              vuruşlarınızı tempoyla karşılaştırır ve sonunda başarı puanı verir.
-            </p>
-            {targetNotes.length > 0 ? (
-              <div style={{ textAlign: "center", fontSize: 11, color: "#7EC97E", fontFamily: "monospace", margin: "0 0 6px" }}>
-                ♪ Nota karşılaştırma aktif — {targetNotes.length} hedef nota
-              </div>
-            ) : (
-              <div style={{ textAlign: "center", fontSize: 10.5, color: "#555", margin: "0 4px 6px", lineHeight: 1.6 }}>
-                İpucu: ✎ ekranındaki "Pratik notaları" alanına nota dizisini girerseniz
-                çaldığınız notalar tek tek kontrol edilir.
-              </div>
-            )}
-            <label style={st.toggleRow}>
-              <span style={{ fontSize: 12, color: "#999" }}>Metronom sesi</span>
-              <button style={{ ...st.toggle, background: clickOn ? "#7EC97E33" : "#2a2a35", color: clickOn ? "#7EC97E" : "#666" }}
-                onClick={() => setClickOn((c) => !c)}>{clickOn ? "Açık" : "Kapalı"}</button>
-            </label>
-            <button style={st.bigBtn} onClick={start}>▶ Pratiğe Başla</button>
-          </>
-        )}
-
-        {phase === "countin" && (
-          <>
-            <div style={{ textAlign: "center", margin: "10px 0" }}>
-              <div className="count-pop" key={countNum} style={{ fontSize: 96, fontFamily: "Georgia, serif", color: "#E8C97E", lineHeight: 1.1, textShadow: "0 0 30px rgba(232,201,126,.5)" }}>
-                {countNum}
-              </div>
-              <div style={{ fontSize: 11, color: "#666", letterSpacing: 3, textTransform: "uppercase" }}>Hazır ol…</div>
-            </div>
-            <div style={st.beatRow}>
-              {Array.from({ length: beatsPerBar }).map((_, i) => (
-                <div key={i} style={{ ...st.beatDot, background: beat === i ? (i === 0 ? "#E8C97E" : "#EEE8D5") : "#2a2a35", transform: beat === i ? "scale(1.35)" : "scale(1)" }} />
-              ))}
-            </div>
-          </>
-        )}
-
-        {phase === "live" && (
-          <>
-            {/* Akan cursor'lu tab şeridi (staff verisi varsa) */}
-            {staffData && (
-              <div style={{ margin: "10px 0 6px", background: "#0d0d14", borderRadius: 10, padding: "6px 0", overflow: "hidden", border: "1px solid #ffffff10" }}>
-                <PracticeStrip data={staffData} part={staffPart} cursorTick={liveCursor} />
-              </div>
-            )}
-            <div style={{ textAlign: "center", margin: "6px 0 4px" }}>
-              <div style={{ fontSize: 40, fontFamily: "Georgia, serif", color: "#E8C97E", minHeight: 48 }}>{liveNote}</div>
-              <div style={{ fontSize: 10, color: "#666", letterSpacing: 2, textTransform: "uppercase" }}>Algılanan nota</div>
-              {targetNotes.length > 0 && (
-                <div style={{ marginTop: 8, fontSize: 13, fontFamily: "monospace" }}>
-                  <span style={{ color: "#7EC97E" }}>Hedef: {targetNotes[tIdx % targetNotes.length].label}</span>
-                  <span style={{ color: "#666" }}>  ·  Doğru {hit.c}/{hit.a}</span>
-                </div>
-              )}
-            </div>
-            <div style={st.beatRow}>
-              {Array.from({ length: beatsPerBar }).map((_, i) => (
-                <div key={i} style={{ ...st.beatDot, background: beat === i ? (i === 0 ? "#E8C97E" : "#EEE8D5") : "#2a2a35", transform: beat === i ? "scale(1.35)" : "scale(1)" }} />
-              ))}
-            </div>
-            <div style={{ textAlign: "center", fontSize: 11, color: "#666", fontFamily: "monospace" }}>
-              {bars} bar · {onsetsRef.current.length} vuruş algılandı
-            </div>
-            <button style={{ ...st.bigBtn, background: "#3a2020", borderColor: "#C97E7E66", color: "#C97E7E" }} onClick={finish}>
-              ■ Bitir ve Puanla
-            </button>
-          </>
-        )}
-
-        {phase === "result" && result && (
-          <>
-            <div style={{ textAlign: "center", margin: "18px 0 6px" }}>
-              <div style={{ fontSize: 34, letterSpacing: 6 }}>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i} style={{ color: i < result.stars ? "#E8C97E" : "#2a2a35", textShadow: i < result.stars ? "0 0 14px rgba(232,201,126,.6)" : "none" }}>★</span>
-                ))}
-              </div>
-              <div style={{ fontSize: 42, fontFamily: "Georgia, serif", color: "#EEE8D5", marginTop: 8 }}>
-                %{result.accuracy}
-              </div>
-              <div style={{ fontSize: 10, color: "#666", letterSpacing: 2, textTransform: "uppercase" }}>Başarı Oranı</div>
-            </div>
-            <div style={st.resultGrid}>
-              {result.notePct != null && (
-                <div style={st.resultCell}><b style={{ color: "#7EC97E" }}>{result.notePct}%</b><span>Nota</span></div>
-              )}
-              <div style={st.resultCell}><b style={{ color: "#E8C97E" }}>{result.timingPct ?? 0}%</b><span>Ritim</span></div>
-              <div style={st.resultCell}><b style={{ color: "#E8C97E" }}>{result.onsets}</b><span>Vuruş</span></div>
-              <div style={st.resultCell}><b style={{ color: "#E8C97E" }}>{result.beats}</b><span>Beat</span></div>
-            </div>
-            <div style={{ fontSize: 10.5, color: "#555", textAlign: "center", lineHeight: 1.6, margin: "10px 4px 0" }}>
-              {result.notePct != null
-                ? `Nota karşılaştırması pitch class üzerinden yapılır (oktav bağımsız). Doğru: ${result.correct}/${result.attempts}.`
-                : "Puan, vuruş zamanlaması ve çalma yoğunluğuna dayanır. Nota bazlı puanlama için ✎ ekranından pratik notaları girin."}
-            </div>
-            <button style={st.bigBtn} onClick={() => { setPhase("ready"); setBeat(-1); }}>↻ Tekrar Dene</button>
-          </>
-        )}
-
-        {phase === "error" && (
-          <p style={{ color: "#C97E7E", fontSize: 12, textAlign: "center", margin: "20px 8px", lineHeight: 1.7 }}>{errMsg}</p>
-        )}
-
-        <button style={st.sheetClose} onClick={() => { cleanup(); onClose(); }}>Kapat</button>
-      </div>
-    </div>
-  );
-}
-
 // ─── STİLLER ─────────────────────────────────────────────────────────────────
 const BG = "#0A0A0F", SURF = "#12121A", SURF2 = "#1A1A24", BORDER = "#ffffff10";
 const TEXT = "#EEE8D5", MUTED = "#66666f", GOLD = "#E8C97E";
@@ -2419,6 +2014,7 @@ const st = {
   progressTrack: { height: 2, background: SURF2, margin: "8px 14px 0", borderRadius: 2, flexShrink: 0 },
   progressBar: { height: "100%", borderRadius: 2, minWidth: 14, transition: "width .1s" },
   pre: { color: TEXT, fontFamily: "'Courier New', monospace", lineHeight: 1.75, margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" },
+  practicePanel: { padding: "10px 16px 12px", borderTop: "1px solid #7EC97E33", background: "#0c140c", flexShrink: 0 },
   emptyPart: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, padding: 20 },
   editor: { flex: 1, background: SURF, border: `1px solid ${BORDER}`, borderRadius: 12, color: TEXT, fontFamily: "'Courier New', monospace", fontSize: 12, padding: 12, resize: "none", lineHeight: 1.6 },
   notesInput: { background: SURF, border: `1px solid ${BORDER}`, borderRadius: 10, color: TEXT, fontSize: 12, padding: "9px 12px", fontFamily: "Georgia, serif" },
